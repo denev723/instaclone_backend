@@ -1,53 +1,14 @@
-import { PrismaClient } from "@prisma/client";
-import { ApolloServer, gql } from "apollo-server";
+require("dotenv").config();
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import schema from "./schema";
 
-const client = new PrismaClient();
+const server = new ApolloServer({ schema });
+const PORT = process.env.PORT;
 
-const typeDefs = gql`
-  type Movie {
-    id: Int!
-    title: String!
-    year: Int!
-    genre: String
-    createdAt: String!
-    updatedAt: String!
-  }
-  type Query {
-    movies: [Movie]
-    movie(id: Int!): Movie
-  }
-  type Mutation {
-    createMovie(title: String!, year: Int!, genre: String): Movie
-    deleteMovie(id: String!): Boolean
-  }
-`;
-
-const resolvers = {
-  Query: {
-    movies: () => client.movie.findMany(),
-    movie: (_, { id }) => ({ title: "hello", year: 2021 }),
-  },
-  Mutation: {
-    createMovie: (_, { title, year, genre }) =>
-      client.movie.create({
-        data: {
-          title,
-          year,
-          genre,
-        },
-      }),
-    deleteMovie: (_, { id }) => {
-      console.log(title);
-      return true;
-    },
-  },
-};
-
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
-
-server
-  .listen()
-  .then(() => console.log("Server is running on http://localhost:4000"));
+(async function () {
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: PORT },
+  });
+  console.log(`🚀  Server ready at: ${url}`);
+})();
