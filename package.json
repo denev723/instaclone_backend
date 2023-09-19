@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node server",
+    "preinstall": "npx npm-force-resolutions",
+    "dev": "nodemon --exec babel-node server --delay 2",
     "migrate": "npx prisma migrate dev",
     "studio": "npx prisma studio"
   },
@@ -26,9 +27,14 @@
     "@graphql-tools/schema": "^10.0.0",
     "@prisma/client": "^5.2.0",
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "graphql": "^16.8.0",
-    "jsonwebtoken": "^9.0.2"
+    "graphql-upload": "^15.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.15",
@@ -37,5 +43,9 @@
     "@babel/preset-env": "^7.22.15",
     "nodemon": "^3.0.1",
     "prisma": "^5.2.0"
+  },
+  "resolutions": {
+    "fs-capacitor": "^6.2.0",
+    "graphql-upload": "^11.0.0"
   }
 }

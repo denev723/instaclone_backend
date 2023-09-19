@@ -10,6 +10,9 @@ export default `#graphql
             email: String
             username: String
             password: String
+            bio: String
+            avatar: Upload
         ): EditProfileResult!
     }
+    scalar Upload
 `;
