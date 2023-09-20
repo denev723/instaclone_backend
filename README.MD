@@ -12,5 +12,16 @@ Instaclone Backend.
 - [x] Follow User
 - [x] Unfollow User
 - [x] See Followers and See Following with Pagination
-- [ ] Computed Fields
-- [ ] Search User
+- [x] Computed Fields
+- [x] Search User
+
+## Photos:
+
+- [ ] Upload Photo (Parse #)
+- [ ] See Photo
+- [ ] See Hashtags
+- [ ] Search Photos
+- [ ] Edit Photo
+- [ ] Like / Unlike Photo
+- [ ] See Photo Likes
+- [ ] See Feed
