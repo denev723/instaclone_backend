@@ -43,5 +43,11 @@ export default {
       });
       return Boolean(checkFollowing);
     },
+    photos: ({ id }) =>
+      client.user
+        .findUnique({
+          where: { id },
+        })
+        .photos(),
   },
 };
