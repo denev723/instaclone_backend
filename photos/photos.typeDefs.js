@@ -6,6 +6,8 @@ type Photo {
 	caption: String
 	hashtags: [Hashtag]
 	likes: Int!
+	comments: Int!
+	isMine: Boolean!
 	createdAt: String!
 	updatedAt: String!
 }

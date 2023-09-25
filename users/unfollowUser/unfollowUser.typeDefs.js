@@ -1,9 +1,5 @@
-export default `#graphql
-    type UnfollowUserResult {
-        ok: Boolean!
-        error: String
-    }
-    type Mutation {
-        unfollowUser(username: String!): UnfollowUserResult!
-    }
+export default `# graphql
+type Mutation {
+	unfollowUser(username: String!): MutationResponse!
+}
 `;

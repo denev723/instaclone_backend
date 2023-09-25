@@ -1,5 +1,5 @@
 export default`# graphql
 type Mutation {
-	toggleLike(id: Int!): MutationResponse!
+	deletePhoto(id: Int!): MutationResponse!
 }
 `
