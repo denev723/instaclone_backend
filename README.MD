@@ -30,10 +30,15 @@ Instaclone Backend.
 
 ## Comments
 
-- [ ] Comment on Photo
-- [ ] Edit Comment
-- [ ] Delete Comment(Is Mine)
+- [x] Comment on Photo
+- [x] Edit Comment
+- [x] Delete Comment(Is Mine)
 
 ## Extras
 
-- [ ] S3 Image Upload
+- [x] S3 Image Upload
+
+## DMs
+- [x] See Room
+- [ ] Send Message(Create Room)
+- [ ] Realtime Messages

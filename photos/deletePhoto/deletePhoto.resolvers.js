@@ -1,4 +1,5 @@
 import client from "../../client";
+import { deleteToS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 
 export default {
@@ -10,9 +11,9 @@ export default {
         },
         select: {
           userId: true,
+          file: true,
         },
       });
-      console.log(photo.userId === loggedInUser.id);
       if (!photo) {
         return {
           ok: false,
@@ -29,6 +30,7 @@ export default {
             id,
           },
         });
+        deleteToS3(photo.file, "uploads");
         return {
           ok: true,
         };
