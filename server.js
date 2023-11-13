@@ -2,6 +2,9 @@ require("dotenv").config();
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.js";
 import logger from "morgan";
 import express from "express";
@@ -15,11 +18,42 @@ const { json } = pkg;
 const PORT = process.env.PORT;
 const app = express();
 const httpServer = http.createServer(app);
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: "/graphql",
+});
+const serverCleanup = useServer(
+  {
+    schema,
+    context: async ({ connectionParams: { token } }) => {
+      if (!token) {
+        throw new Error("You can't listen");
+      }
+      const loggedInUser = await getUser(token);
+      return {
+        loggedInUser,
+      };
+    },
+  },
+  wsServer
+);
 async function startApolloServer(typeDefs, resolvers) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
     csrfPrevention: false,
   });
 
@@ -32,13 +66,16 @@ async function startApolloServer(typeDefs, resolvers) {
     logger("tiny"),
     graphqlUploadExpress(),
     expressMiddleware(server, {
-      context: async ({ req }) => {
-        return {
-          loggedInUser: await getUser(req.headers.token),
-        };
+      context: async (ctx) => {
+        if (ctx.req) {
+          return {
+            loggedInUser: await getUser(ctx.req.headers.token),
+          };
+        }
       },
     })
   );
+
   app.use("/static", express.static("uploads"));
 
   await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
